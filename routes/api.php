@@ -27,4 +27,5 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     //ProductController
 
     Route::resource('products', ProductController::class);
+    Route::get('logout',[RegisterController::class, 'logout']);
 });

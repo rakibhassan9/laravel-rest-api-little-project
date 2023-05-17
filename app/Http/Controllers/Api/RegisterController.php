@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Validation\Validator;
 use App\Models\User;
 use Auth;
 
@@ -64,5 +64,10 @@ class RegisterController extends BaseController
         else{
             return $this->sendError('Wrong Credentials', ['error' => 'Unauthorized']);
         }
+    }
+
+    public function logout(){
+        auth()->user()->tokens()->delete();
+        return $this->sendResponse([], 'User Logged Out');
     }
 }

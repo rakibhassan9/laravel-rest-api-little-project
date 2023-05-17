@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends BaseController
 {
@@ -25,7 +26,7 @@ class ProductController extends BaseController
             'name' => 'required',
             'description' => 'required',
         ]);
-        if($this->$validator->fails()){
+        if($validator->fails()){
             return $this->sendError('Validation Error', $this->errors());
         }
 
@@ -42,6 +43,25 @@ class ProductController extends BaseController
             return $this->sendError('Product Not Found');
         }
         return $this->sendResponse(new ProductResource($product), 'Product Retrived');
+    }
+
+    public function update(Request $request, Product $product){
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error', $this->errors());
+        }
+
+        $product->update($request->all());
+        return $this->sendResponse(new ProductResource($product), 'Product Updated');
+    }
+
+    public function destroy(Product $product){
+        $product->delete();
+        return $this->sendResponse(new ProductResource($product), 'Product Deleted');
     }
 
 }
